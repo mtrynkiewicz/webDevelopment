@@ -18,6 +18,28 @@ consumes:
 produces:
   - application/json
 paths:
+  /:
+    x-swagger-router-controller: homepage
+    get:
+      operationId: homepage
+      produces:
+        - text/html; charset=utf-8
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+  /material.css:
+    x-swagger-router-controller: homepage
+    get:
+      operationId: material_css
+      produces:
+        - text/html; charset=utf-8
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
   /hello:
     # binds a127 app logic to a route
     x-swagger-router-controller: hello_world
