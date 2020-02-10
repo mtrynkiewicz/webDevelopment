@@ -42,6 +42,39 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /expense:
+    x-swagger-router-controller: expense
+    get:
+      operationId: expensesList
+      description: Get list of all images.
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ExpensesListResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /expense/{id}:
+    x-swagger-router-controller: expense
+    get:
+      operationId: readExpense
+      description: Get expense with selected id
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ExpenseResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -52,6 +85,46 @@ definitions:
     properties:
       message:
         type: string
+  ExpenseResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      expenseValue:
+        type: number
+      expenseDate:
+        type: string
+        format: date-time
+      expenseDescription:
+        type: string
+      expenseCurrencyId:
+        type: string
+      expenseCategoryId:
+        type: string
+      expenseMonthId:
+        type: string
+  ExpensesListResponse:
+    properties:
+      expenses:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            expenseValue:
+              type: number
+            expenseDate:
+              type: string
+              format: date-time
+            expenseDescription:
+              type: string
+            expenseCurrencyId:
+              type: string
+            expenseCategoryId:
+              type: string
+            expenseMonthId:
+              type: string  
   ErrorResponse:
     required:
       - message
