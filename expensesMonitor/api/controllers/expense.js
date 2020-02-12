@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
 var util = require('util');
 var model = require('../model/model.js');
 
@@ -20,27 +22,57 @@ testData = new model.SingleExpense(
 
 module.exports = {
   expensesList,
-  readExpense
+  singleExpense,
+  removeSingleExpense,
+  confirmExpense
 };
 
-function readExpense(req, res, next) {
+function removeSingleExpense(req, res, next) {
+	
 	var param = req.swagger.params.id.value
+	
 	r.db("ExpensesDatabase").table("SingleExpense")
-		.get(param).run().then(
-	function(result){
-	console.log(JSON.stringify(result));
-	res.json(result);
-	}
-	);
+		.get(param).delete().run().then(
+	function(okOk)
+	{
+		console.log(JSON.stringify(result));
+		
+		if(result.deleted == 1)
+		{
+			res.json({param,status:'deleted'});
+		}
+		else 
+		{
+			res.json({param,status:'not deleted'});
+		}
+	});
 }
 
 function expensesList(req,res,next)
 {
-	r.db("ExpensesDatabase").table("SingleExpense")
-		.run().then(
-	function(result){
-	console.log(JSON.stringify(result));
-	res.json(result);
-	}
-	);
+	r.db("ExpensesDatabase").table("SingleExpense").run().then(function(result)
+	{
+		res.json(result);
+	});
 }
+
+function singleExpense(req,res,next)
+{
+	let file = path.join(__dirname,"..","..","html","addNewExpense.html");
+	let contents = fs.readFileSync(file, 'utf8');
+	res.send(contents);
+}
+
+
+function confirmExpense(req,res,next)
+{
+	r.db("ExpensesDatabase").table("SingleExpense").run().then(function(result)
+	{
+		res.json(result);
+	});
+}
+
+
+
+
+

@@ -34,36 +34,54 @@ paths:
     get:
       operationId: material_css
       produces:
+        - text/css; charset=utf-8
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+  /libs/{folder}/{name}:
+    x-swagger-router-controller: libs
+    get:
+      operationId: fileserve
+      description: return selected files
+      parameters:
+        - name: folder
+          type: string
+          in: path
+          required: true
+        - name: name
+          type: string
+          in: path
+          required: true
+      produces:
         - text/html; charset=utf-8
       responses:
         200:
           description: Success
           schema:
             type: string
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
-    get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /singleExpense/{id}:
+    x-swagger-router-controller: expense
+    get:
+      description: Returns the game itself
+      operationId: singleExpense
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      produces:
+        - text/html; charset=utf-8
+      responses:
+       200:
+        description: Success
+        schema:
+          type: string
   /expense:
     x-swagger-router-controller: expense
     get:
@@ -78,10 +96,45 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /expense/{id}:
+    post:
+      operationId: createExpense
+      description: bla
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: id
+          description: id.
+          type: string
+          required: false
+          in: formData
+        - name: date
+          description: date.
+          type: string
+          required: true
+          in: formData
+        - name: currencyShort
+          description: currencyShort.
+          type: string
+          required: true
+          in: formData
+        - name: categoryName
+          description: categoryName.
+          type: string
+          required: true
+          in: formData  
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /removeExpense/{id}:
     x-swagger-router-controller: expense
     get:
-      operationId: readExpense
+      operationId: removeSingleExpense
       description: Get expense with selected id
       parameters:
         - name: id
@@ -92,7 +145,50 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/ExpenseResponse"
+            $ref: "#/definitions/OperationStatus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /categories:
+    x-swagger-router-controller: category
+    get:
+      operationId: categories
+      description: Get list of all categories.
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/CategoriesListResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /currencies:
+    x-swagger-router-controller: currency
+    get:
+      operationId: currencies
+      description: Get list of all categories.
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/CurrenciesListResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
+            
+  /confimExpense:
+    x-swagger-router-controller: expense
+    get:
+      operationId: confirmExpense
+      description: Get list of all categories.
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/CurrenciesListResponse"
         default:
           description: Error
           schema:
@@ -101,30 +197,6 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  HelloWorldResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
-  ExpenseResponse:
-    type: object
-    properties:
-      id:
-        type: string
-      expenseValue:
-        type: number
-      expenseDate:
-        type: string
-        format: date-time
-      expenseDescription:
-        type: string
-      expenseCurrencyId:
-        type: string
-      expenseCategoryId:
-        type: string
-      expenseMonthId:
-        type: string
   ExpensesListResponse:
     properties:
       expenses:
@@ -147,6 +219,39 @@ definitions:
               type: string
             expenseMonthId:
               type: string  
+  CategoriesListResponse:
+    properties:
+      expenses:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            categoryName:
+              type: string
+            categoryPriority:
+              type: number
+  CurrenciesListResponse:
+    properties:
+      expenses:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            currencyName:
+              type: string
+            currencyShort:
+              type: number
+  OperationStatus:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
   ErrorResponse:
     required:
       - message
