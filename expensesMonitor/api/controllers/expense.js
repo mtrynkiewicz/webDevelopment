@@ -24,7 +24,7 @@ module.exports = {
   expensesList,
   singleExpense,
   removeSingleExpense,
-  confirmExpense
+  createExpense
 };
 
 function removeSingleExpense(req, res, next) {
@@ -33,11 +33,11 @@ function removeSingleExpense(req, res, next) {
 	
 	r.db("ExpensesDatabase").table("SingleExpense")
 		.get(param).delete().run().then(
-	function(okOk)
+	function(resOfDelete)
 	{
-		console.log(JSON.stringify(result));
+		console.log(JSON.stringify(resOfDelete));
 		
-		if(result.deleted == 1)
+		if(resOfDelete.deleted == 1)
 		{
 			res.json({param,status:'deleted'});
 		}
@@ -64,15 +64,34 @@ function singleExpense(req,res,next)
 }
 
 
-function confirmExpense(req,res,next)
+function createExpense(req,res,next)
 {
-	r.db("ExpensesDatabase").table("SingleExpense").run().then(function(result)
+	var expValue = req.swagger.params.expenseValue.value;
+	var expDate = req.swagger.params.date.value;
+	var expDesc = req.swagger.params.expenseDescription.value;
+	
+	
+	console.log(expValue);
+	console.log(expDate);
+	console.log(expDesc);
+    r.db('ExpensesDatabase').table('SingleExpense').insert(
 	{
-		res.json(result);
+        expenseValue: expValue,
+        expenseDate: expDate,
+        expenseDescription: expDesc,
+    },
+	{returnChanges: true}).run().then
+	(function(result)
+	{
+		res.json(get_new(result));
 	});
 }
 
-
+function get_new(result) 
+{
+    if (result.changes.length > 0) if (result.changes[0].new_val != null) return result.changes[0].new_val;
+    return result;
+}
 
 
 

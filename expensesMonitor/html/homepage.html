@@ -25,11 +25,6 @@
 			  background: rgba(0, 0, 0, 0.5); 
 		  }
 		  
-		h2 
-		{
-			margin: 0 0 0 8px;
-		}
-		  
 		 .title 
 		 {
 			display: flex;
@@ -78,7 +73,8 @@
 </head>
 <body ng-app="MyApp" layout="column" > 
 	<script>
-		angular.module('MyApp',['ngMaterial']).controller('expensesListController', function($scope, $http)
+	
+		var my controller = angular.module('MyApp',['ngMaterial']).controller('expensesListController', function($scope, $http)
 		{
 			$http.get('http://localhost:10010/expense').then(function(response)
 			{
@@ -99,21 +95,21 @@
 		<div class="">
 			<h2>Keep your expenses under control</h2>
 		</div>
-		<div class="info">
-			<a href="singleExpense/unknown" class="playButton">add new expense</a>
-		</div>
 		
 		<md-list ng-controller='expensesListController'>
 			<md-list-item ng-repeat='value in expenses'>
 				<div id="container">
-					<h3>{{value.expenseValue}}</h3>
-					<h3>{{value.expenseDate}}</h3>
-					<h3>{{value.expenseDescription}}</h3>
+					<h1>{{value.expenseValue}}, {{value.expenseDate}}, {{value.expenseDescription}}</h3>
 					<md-button href="singleExpense/{{value.id}}">edit</md-button>
 					<md-button href="removeExpense/{{value.id}}">remove</md-button>
 				</div>
 			</md-list-item>
 		</md-list>
+		
+		<div class="info">
+			<a href="singleExpense/unknown" class="playButton">add new expense</a>
+		</div>
+		
 		
 	</div>
 </body>

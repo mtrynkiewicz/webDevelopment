@@ -157,25 +157,25 @@
 			});
 		})
 		
-		app.controller('expensesListController', function($scope,ExpenseService)
+		var myContr = app.controller('expensesListController', function($scope,ExpenseService)
 		{
 			$scope.message = "Enter your details!";
 			$scope.submitForm = function()
 			{
 				ExpenseService.AddExpenseToDb($scope.singleExpense);
 			}
-		}).factory("ExpenseService",['$http',function($http)
+		})
+		
+		myContr.factory("ExpenseService",['$http',function($http)
 		{
 			var fac = {};
 			fac.AddExpenseToDb = function(singleExpense)
 			{
-				$http.post("/expense/add",singleExpense).success(function (response)
-				{
-					alert(response.status);
-				})
+				$http.post("/expense",singleExpense)
 			}
 			return fac;
 		}])
+		
 	</script>
 	  
 	<div class="main-block">
@@ -192,8 +192,11 @@
 			  <h2>Wypelnij dane ponizej</h2>
 			</div>
 			<div class="info">
-			  <input class="fname" type="text" placeholder="Wartosc" ng-model="singleExpense.ExpenseValue" required></input>
-			  <input type="date"  placeholder="Data" ng-model="singleExpense.ExpenseDate" required></input>
+			  <input class="fname" type="text" placeholder="Wartosc" ng-model="singleExpense.expenseValue" required></input>
+			  <input type="date"  placeholder="Data" ng-model="singleExpense.date" required></input>
+			  
+			  <input class="fname" type="text" placeholder="Opis" ng-model="singleExpense.expenseDescription" required></input>
+
 			  
 			  <div ng-app="myApp" ng-controller="currenciesListController">
 				<select ng-model = "selectedName" ng-options="x.currencyShort for x in currencies" ng-model="singleExpense.Currency" required >
@@ -204,6 +207,8 @@
 				<select ng-model = "selectedName" ng-options="x.categoryName for x in categories" ng-model="singleExpense.Category" required >
 				</select>
 			  </div>
+
+
 			  
 			</div>
 			<button type="submit" ng-disabled="saveExpenseForm.$invalid" >Zatwierdz</button>

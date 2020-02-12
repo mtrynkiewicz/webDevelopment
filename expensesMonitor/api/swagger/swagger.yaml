@@ -107,26 +107,36 @@ paths:
           type: string
           required: false
           in: formData
+        - name: expenseValue
+          description: wartosc
+          type: string
+          required: false
+          in: formData
         - name: date
           description: date.
           type: string
-          required: true
+          required: false
           in: formData
         - name: currencyShort
           description: currencyShort.
           type: string
-          required: true
+          required: false
           in: formData
         - name: categoryName
           description: categoryName.
           type: string
-          required: true
-          in: formData  
+          required: false
+          in: formData
+        - name: expenseDescription
+          description: desc.
+          type: string
+          required: false
+          in: formData
       responses:
         "200":
           description: Success
           schema:
-            type: string
+            $ref: "#/definitions/ExpenseResponse"
         default:
           description: Error
           schema:
@@ -178,7 +188,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse" 
-            
   /confimExpense:
     x-swagger-router-controller: expense
     get:
@@ -218,7 +227,25 @@ definitions:
             expenseCategoryId:
               type: string
             expenseMonthId:
-              type: string  
+              type: string
+  ExpenseResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      expenseValue:
+        type: number
+      expenseDate:
+        type: string
+        format: date-time
+      expenseDescription:
+        type: string
+      expenseCurrencyId:
+        type: string
+      expenseCategoryId:
+        type: string
+      expenseMonthId:
+        type: string
   CategoriesListResponse:
     properties:
       expenses:
