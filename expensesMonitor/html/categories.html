@@ -36,7 +36,6 @@
 		{
 			display: flex;
 			flex-direction: column;
-			margin-bottom: 2px;
 		}
 		.simpleButton
 		{
@@ -82,34 +81,34 @@
 
     </style>
 	
-	<link rel="stylesheet" href="material.css">
+	<link rel="stylesheet" href="../material.css">
 
-	<script src="libs/angular/angular.min.js"></script>
-	<script src="libs/angular-animate/angular-animate.min.js"></script>
-	<script src="libs/angular-aria/angular-aria.min.js"></script>
-	<script src="libs/angular-material/angular-material.js"></script>
+	<script src="../libs/angular/angular.min.js"></script>
+	<script src="../libs/angular-animate/angular-animate.min.js"></script>
+	<script src="../libs/angular-aria/angular-aria.min.js"></script>
+	<script src="../libs/angular-material/angular-material.js"></script>
 	
 </head>
 <body ng-app="MyApp" layout="column" > 
 	<script>
 		var app = angular.module("MyApp",[]);
-		app.controller('expensesListController', function($scope, $http)
+		app.controller('categoriesListController', function($scope, $http)
 		{
-			$http.get('http://localhost:10010/expense').then(function(response)
+			$http.get('http://localhost:10010/categories').then(function(response)
 			{
-				$scope.expenses = response.data
+				$scope.categories = response.data
 			});
 		})
 	</script>
 	<div class="main-block">
 		<div class="">
-			<h2>Keep your expenses under control</h2>
+			<h2>Zarz¹dzaj kategoriami</h2>
 		</div>
 		
-		<md-list ng-controller='expensesListController'>
-			<md-list-item ng-repeat='value in expenses'>
+		<md-list ng-controller='categoriesListController'>
+			<md-list-item ng-repeat='value in categories'>
 			<div class="container">
-				<h3>{{value.expenseValue}}, {{value.expenseDate}}, {{value.expenseDescription}}</h3>
+				<h3>{{value.categoryName}}, {{value.categoryPriority}}</h3>
 				<a href="singleExpense/{{value.id}}" class="simpleButton">eidt</a>
 				<a href="removeExpense/{{value.id}}" class="simpleButton">dteel</a>
 			</div>
@@ -117,10 +116,7 @@
 		</md-list>
 		
 		<div class="info">
-			<a href="singleExpense/unknown" class="playButton">add new expense</a>
-		</div>
-		<div class="info">
-			<a href="manageCategories" class="playButton">manage Categories</a>
+			<a href="category/unknown" class="playButton">add new category</a>
 		</div>
 	</div>
 </body>
