@@ -10,7 +10,8 @@ var r = thinkagain.r;
 
 module.exports = {
   categories,
-  manageCategories
+  manageCategories,
+  removeSingleCategory
 };
 
 function categories(req,res,next)
@@ -27,3 +28,26 @@ function manageCategories(req, res, next)
 	let contents = fs.readFileSync(file, 'utf8');
 	res.send(contents);
 }
+
+function removeSingleCategory(req, res, next) {
+	
+	console.log("Kurwa mac");
+	var param = req.swagger.params.id.value
+	
+	r.db("ExpensesDatabase").table("SingleCategory")
+		.get(param).delete().run().then(
+	function(resOfDelete)
+	{
+		console.log(JSON.stringify(resOfDelete));
+		
+		if(resOfDelete.deleted == 1)
+		{
+			res.json({param,status:'deleted'});
+		}
+		else 
+		{
+			res.json({param,status:'not deleted'});
+		}
+	});
+}
+

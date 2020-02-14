@@ -160,6 +160,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /category/{id}:
+    x-swagger-router-controller: category
+    delete:
+      operationId: removeSingleCategory
+      description: remove
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/OperationStatus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /categories:
     x-swagger-router-controller: category
     get:
@@ -174,6 +193,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  
   /manageCategories:
     x-swagger-router-controller: category
     get:
@@ -184,7 +204,7 @@ paths:
         200:
           description: Success
           schema:
-            type: string          
+            type: string
   /currencies:
     x-swagger-router-controller: currency
     get:
