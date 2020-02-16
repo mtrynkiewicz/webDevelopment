@@ -6,79 +6,128 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Expenses monitor</title>
 
-	<style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-			background: rgba(0, 0, 0, 0.5);
-			padding:0;
-			margin:0;
-        }
-
+	<title>Educational registration form</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <style>
+      html, body {
+      min-height: 100%;
+      }
+      body, div, form, input, select, p 
+	  { 
+		  padding: 0;
+		  margin: 0;
+		  outline: none;
+		  font-family: Roboto, Arial, sans-serif;
+		  font-size: 16px;
+		  color: #eee;
+      }
+      h1, h2 
+	  {
+		text-transform: uppercase;
+		font-weight: 400;
+      }
+      h2 
+	  {
+		margin: 0 0 0 8px;
+      }
+      .main-block 
+	  {
+		  display: flex;
+		  flex-direction: column;
+		  justify-content: center;
+		  align-items: center;
+		  height: 100%;
+		  padding: 25px;
+		  background: rgba(0, 0, 0, 0.5); 
+      }
+      .left-part, form {
+      padding: 25px;
+      }
+      .left-part {
+      text-align: center;
+      }
+      .fa-graduation-cap {
+      font-size: 72px;
+      }
+      form {
+      background: rgba(0, 0, 0, 0.7); 
+      }
+      .title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      }
+      .info {
+      display: flex;
+      flex-direction: column;
+      }
+      input, select 
+	  {
+		padding: 5px;
+		margin-bottom: 30px;
+		background: transparent;
+		border: none;
+		border-bottom: 1px solid #eee;
+      }
+      input::placeholder 
+	  {
+		color: #eee;
+      }
+      option:focus 
+	  {
+		border: none;
+      }
+      option 
+	  {
+		background: black; 
+		border: none;
+      }
+      .checkbox input 
+	  {
+		margin: 0 10px 0 0;
+		vertical-align: middle;
+      }
+      .btn-item, button
+	  {
+		padding: 10px 5px;
+		margin-top: 20px;
+		border-radius: 5px; 
+		border: none;
+		background: #26a9e0; 
+		text-decoration: none;
+		font-size: 15px;
+		font-weight: 400;
+		color: #fff;
+      }
+	  
+      .btn-item 
+	  {
+		  display: inline-block;
+		  margin: 20px 5px 0;
+      }
+      
+      button:hover, .btn-item:hover 
+	  {
+		background: #85d6de;
+      }
+      @media (min-width: 568px) 
+	  {
+		html, body 
+		{
+			height: 100%;
+		}
 		.main-block 
-		  {
-			  display: flex;
-			  flex-direction: column;
-			  justify-content: center;
-			  align-items: center;
-			  height: 100%;
-			  padding: 25px;
-			  background: rgba(0, 0, 0, 0.5); 
-		  }
-		  
-		 .title 
-		 {
-			display: flex;
-			align-items: center;
-			margin-bottom: 20px;
-		  }
-
-		.info
 		{
-			display: flex;
-			flex-direction: column;
+		  flex-direction: row;
+		  height: calc(100% - 50px);
 		}
-		.simpleButton
+		.left-part, form 
 		{
-			background-color: #aaaaaa;
-            display: inline-block;
-            cursor: pointer;
-            color: #000000;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 12px 45px;
-            text-decoration: none;
+			flex: 1;
+			height: auto;
 		}
-		
-		.simpleButton:active {
-            position: relative;
-            top: 1px;
-        }
-		
-		
-        .playButton {
-            background-color: #008b8b;
-            display: inline-block;
-            cursor: pointer;
-            color: #000000;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 12px 45px;
-            text-decoration: none;
-        }
-
-        .playButton:hover 
-		{
-			background-color: #ffffff;
-            color: #008b8b;
-        }
-
-        .playButton:active {
-            position: relative;
-            top: 1px;
-        }
-
+      }
     </style>
 	
 	<link rel="stylesheet" href="../material.css">
@@ -91,10 +140,9 @@
 </head>
 <body ng-app="MyApp" layout="column" > 
 	<script>
+	
 		var app = angular.module("MyApp",[]);
-		
-		console.log($scope.data)
-		app.controller('categoriesListController', function($rootScope, $scope, $http)
+		var myContr = app.controller('categoriesListController', function($window, $scope, $http)
 		{
 			$http.get('http://localhost:10010/categories').then(function(response)
 			{
@@ -102,7 +150,7 @@
 			});
 			
 			$scope.removeCategoryClick = function(id)
-			{				
+			{			
 				$http.delete('http://localhost:10010/category/' + id).then(function(response)
 				{
 					$http.get('http://localhost:10010/categories').then(function(response)
@@ -111,29 +159,120 @@
 					});
 				});
 			};
-		})
+					
+			$scope.editCategoryClick = function(id)
+			{			
+				$http.get('http://localhost:10010/category/'+id).then(function(response)
+				{
+					
+					if(angular.isUndefined($scope.singleCategory))
+					{
+						$scope.singleCategory = {};
+					}
+					console.log(response.data)
+					$scope.singleCategory.categoryName = response.data.categoryName;
+					$scope.singleCategory.categoryPriority = response.data.categoryPriority;
+					$scope.singleCategory.id = response.data.id;
+					
+					
+					$scope.isAddingNewCategory = 0;
+				});
+			};
+			
+			$scope.submitForm = function()
+			{
+				console.log($scope.isAddingNewCategory)
+				if($scope.isAddingNewCategory === 1)
+				{
+					console.log("dodanie poszlo")
+					$http.post("/categories",$scope.singleCategory).then(function(response)
+					{					
+						$window.location.href = '/manageCategories';
+					});
+					
+				}
+				else 
+				{
+					console.log("edycja poszla")
+					$http.put("/categories",$scope.singleCategory).then(function(response)
+					{					
+						$window.location.href = '/manageCategories';
+					});
+				}
+				
+			};
 		
+			$scope.clearEnteredData = function()
+			{
+				if(angular.isUndefined($scope.singleCategory))
+				{
+					$scope.singleCategory = {};
+				}
+				$scope.singleCategory.categoryName = "";
+				$scope.singleCategory.categoryPriority = 1;
+				$scope.singleCategory.id = "";
+				
+				$scope.isAddingNewCategory = 1;
+			};				
+			$scope.isAddingNewCategory = 1;
+		})		
 	</script>
-	<div class="main-block">
-		<div class="">
-			<h2>Zarz¹dzaj kategoriami</h2>
+	
+	<div class="main-block" ng-controller = 'categoriesListController'>
+      <div class="left-part">
+        <div class="">
+			<h2>Zarzadzaj kategoriami</h2>
 		</div>
 		
-		<md-list ng-controller='categoriesListController'>
+		<md-list >
 			<md-list-item ng-repeat='value in categories'>
 			<div class="container">
 				<h3>{{value.categoryName}}, {{value.categoryPriority}}</h3>
-				<button ng-click="removeCategoryClick(value.id)" >usun
-					
-				</md-button>
-				
+				<button ng-click="removeCategoryClick(value.id)">usun</button>
+				<button ng-click="editCategoryClick(value.id)">edytuj</button>
 			</div>
 			</md-list-item>
 		</md-list>
+      </div>
+	  
+	  <div>
 		
-		<div class="info">
-			<a href="category/unknown" class="playButton">add new category</a>
-		</div>
-	</div>
+		<form name="saveCategoryForm" action="#"  ng-submit="submitForm()">
+			<button ng-click="clearEnteredData()" >Wyczysc</button>
+
+			<div class="title">
+			  <i class="fas fa-pencil-alt"></i> 
+			  <h3> Wprowadz dane kategorii a nastepnie zatwierdz</h3>
+			</div>
+
+			<div class="info">
+			  <div ng-hide="!singleCategory.categoryName">
+				<h3>id:</h3>
+				<input class="fname" type="text"  ng-readonly="true" placeholder="Pole nie edytowalne, id zostanie stworzone samoczynnie" ng-model="singleCategory.id" ></input>
+			  </div>
+			  <input class="fname" type="text" placeholder="Nazwa" ng-model="singleCategory.categoryName" required></input>
+			  
+			  Priorytet
+			  <div ng-app="myApp" >
+				<select ng-model="singleCategory.categoryPriority" required>
+					<option value=1>1</option>
+					<option value=2>2</option>
+					<option value=3>3</option>
+					<option value=4>4</option>
+					<option value=5>5</option>
+					<option value=6>6</option>
+					<option value=7>7</option>
+					<option value=8>8</option>
+					<option value=9>9</option>
+					<option value=10>10</option>
+				</select>
+			  </div>
+			  
+			</div>
+
+			<button type="submit" ng-disabled="saveCategoryForm.$invalid" >Zatwierdz</button>
+		  </form>  
+	  </div>
+    </div>
 </body>
 </html>

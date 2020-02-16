@@ -82,6 +82,23 @@ paths:
         description: Success
         schema:
           type: string
+    delete:
+      operationId: removeSingleExpense
+      description: remove
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/OperationStatus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /expense:
     x-swagger-router-controller: expense
     get:
@@ -136,16 +153,16 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/ExpenseResponse"
+            $ref: "#/definitions/OperationStatus"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /removeExpense/{id}:
-    x-swagger-router-controller: expense
+  /category/{id}:
+    x-swagger-router-controller: category
     get:
-      operationId: removeSingleExpense
-      description: Get expense with selected id
+      operationId: singleCategory
+      description: pobanie jednej kategorii
       parameters:
         - name: id
           type: string
@@ -155,13 +172,11 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/OperationStatus"
+            $ref: "#/definitions/CategoryResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /category/{id}:
-    x-swagger-router-controller: category
     delete:
       operationId: removeSingleCategory
       description: remove
@@ -193,7 +208,66 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  
+    post:
+      operationId: createCategory
+      description: bla
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: id
+          description: id.
+          type: string
+          required: false
+          in: formData
+        - name: categoryName
+          description: name.
+          type: string
+          required: false
+          in: formData
+        - name: categoryPriority
+          description: prior
+          type: number
+          required: false
+          in: formData
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/OperationStatus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      operationId: updateCategory
+      description: bla
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: id
+          description: id.
+          type: string
+          required: true
+          in: formData
+        - name: categoryName
+          description: name.
+          type: string
+          required: false
+          in: formData
+        - name: categoryPriority
+          description: prior
+          type: number
+          required: false
+          in: formData
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/OperationStatus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /manageCategories:
     x-swagger-router-controller: category
     get:
@@ -277,6 +351,16 @@ definitions:
         type: string
       expenseMonthId:
         type: string
+  CategoryResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      categoryName:
+        type: string
+      categoryPriority:
+        type: number
+        format: date-time
   CategoriesListResponse:
     properties:
       expenses:

@@ -7,79 +7,136 @@
 	<title>Expenses monitor</title>
 
 	<style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-			background: rgba(0, 0, 0, 0.5);
-			padding:0;
-			margin:0;
-        }
-
+      html, body {
+      min-height: 100%;
+      }
+      body, div, form, input, select, p 
+	  { 
+		  padding: 0;
+		  margin: 0;
+		  outline: none;
+		  font-family: Roboto, Arial, sans-serif;
+		  font-size: 16px;
+		  color: #eee;
+      }
+      h1, h2 
+	  {
+		text-transform: uppercase;
+		font-weight: 400;
+      }
+      h2 
+	  {
+		margin: 0 0 0 8px;
+      }
+      .main-block 
+	  {
+		  display: flex;
+		  flex-direction: column;
+		  justify-content: center;
+		  align-items: center;
+		  height: 100%;
+		  padding: 25px;
+		  background: rgba(0, 0, 0, 0.5); 
+      }
+      .left-part, form {
+      padding: 25px;
+      }
+      .left-part {
+      text-align: center;
+      }
+      .fa-graduation-cap {
+      font-size: 72px;
+      }
+      form {
+      background: rgba(0, 0, 0, 0.7); 
+      }
+      .title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      }
+      .info {
+      display: flex;
+      flex-direction: column;
+      }
+      input, select 
+	  {
+		padding: 5px;
+		margin-bottom: 30px;
+		background: transparent;
+		border: none;
+		border-bottom: 1px solid #eee;
+      }
+      input::placeholder 
+	  {
+		color: #eee;
+      }
+      option:focus 
+	  {
+		border: none;
+      }
+      option 
+	  {
+		background: black; 
+		border: none;
+      }
+      .checkbox input 
+	  {
+		margin: 0 10px 0 0;
+		vertical-align: middle;
+      }
+      .btn-item, button
+	  {
+		padding: 10px 5px;
+		margin-top: 20px;
+		border-radius: 5px; 
+		border: none;
+		background: #26a9e0; 
+		text-decoration: none;
+		font-size: 15px;
+		font-weight: 400;
+		color: #fff;
+      }
+	  a
+	  {
+		padding: 10px 5px;
+		margin-top: 20px;
+		border-radius: 5px; 
+		border: none;
+		background: #26a9e0; 
+		text-decoration: none;
+		font-size: 15px;
+		font-weight: 400;
+		color: #fff;
+	  }
+	  
+      .btn-item 
+	  {
+		  display: inline-block;
+		  margin: 20px 5px 0;
+      }
+      
+      button:hover, .btn-item:hover 
+	  {
+		background: #85d6de;
+      }
+      @media (min-width: 568px) 
+	  {
+		html, body 
+		{
+			height: 100%;
+		}
 		.main-block 
-		  {
-			  display: flex;
-			  flex-direction: column;
-			  justify-content: center;
-			  align-items: center;
-			  height: 100%;
-			  padding: 25px;
-			  background: rgba(0, 0, 0, 0.5); 
-		  }
-		  
-		 .title 
-		 {
-			display: flex;
-			align-items: center;
-			margin-bottom: 20px;
-		  }
-
-		.info
 		{
-			display: flex;
-			flex-direction: column;
-			margin-bottom: 2px;
+		  flex-direction: row;
+		  height: calc(100% - 50px);
 		}
-		.simpleButton
+		.left-part, form 
 		{
-			background-color: #aaaaaa;
-            display: inline-block;
-            cursor: pointer;
-            color: #000000;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 12px 45px;
-            text-decoration: none;
+			flex: 1;
+			height: auto;
 		}
-		
-		.simpleButton:active {
-            position: relative;
-            top: 1px;
-        }
-		
-		
-        .playButton {
-            background-color: #008b8b;
-            display: inline-block;
-            cursor: pointer;
-            color: #000000;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 12px 45px;
-            text-decoration: none;
-        }
-
-        .playButton:hover 
-		{
-			background-color: #ffffff;
-            color: #008b8b;
-        }
-
-        .playButton:active {
-            position: relative;
-            top: 1px;
-        }
-
+      }
     </style>
 	
 	<link rel="stylesheet" href="material.css">
@@ -99,29 +156,51 @@
 			{
 				$scope.expenses = response.data
 			});
+			
+			$scope.removeExpenseClick = function(id)
+			{			
+				$http.delete('http://localhost:10010/singleExpense/' + id).then(function(response)
+				{
+					$http.get('http://localhost:10010/expense').then(function(response)
+					{
+						$scope.expenses = response.data
+					});
+				});
+			};
 		})
 	</script>
+	
 	<div class="main-block">
+      <div class="left-part">
 		<div class="">
 			<h2>Keep your expenses under control</h2>
 		</div>
 		
 		<md-list ng-controller='expensesListController'>
 			<md-list-item ng-repeat='value in expenses'>
-			<div class="container">
-				<h3>{{value.expenseValue}}, {{value.expenseDate}}, {{value.expenseDescription}}</h3>
-				<a href="singleExpense/{{value.id}}" class="simpleButton">eidt</a>
-				<a href="removeExpense/{{value.id}}" class="simpleButton">dteel</a>
-			</div>
+				<div>
+					<h3>{{value.expenseValue}}, {{value.expenseDate}}, {{value.expenseDescription}}, </h3>				
+					<button class="playButton" ng-click="removeExpenseClick(value.id)" >delete</button>
+				</div>
 			</md-list-item>
 		</md-list>
-		
-		<div class="info">
-			<a href="singleExpense/unknown" class="playButton">add new expense</a>
+      </div>
+	  
+	  <div>
+			<form>
+				<div class="title">
+				  <i class="fas fa-pencil-alt"></i> 
+				  <h3>Panel zarzadzania</h3>
+				</div>
+		  
+				<div class="info">
+					<a href="singleExpense/add" >add new expense</a>
+				</div>
+				<div class="info">
+					<a href="manageCategories" >manage Categories</a>
+				</div>
+			
 		</div>
-		<div class="info">
-			<a href="manageCategories" class="playButton">manage Categories</a>
-		</div>
-	</div>
+</div>
 </body>
 </html>

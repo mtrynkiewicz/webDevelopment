@@ -157,32 +157,23 @@
 			});
 		})
 		
-		var myContr = app.controller('expensesListController', function($scope,ExpenseService)
+		var myContr = app.controller('expensesListController', function($window, $scope, $http)
 		{
-			$scope.message = "Enter your details!";
 			$scope.submitForm = function()
 			{
-				ExpenseService.AddExpenseToDb($scope.singleExpense);
+				$http.post("/expense",$scope.singleExpense).then(function(response)
+				{
+					$window.location.href = '/';
+				});
 			}
-		})
-		
-		myContr.factory("ExpenseService",['$http',function($http)
-		{
-			var fac = {};
-			fac.AddExpenseToDb = function(singleExpense)
-			{
-				$http.post("/expense",singleExpense)
-			}
-			return fac;
-		}])
-		
+		})	
 	</script>
 	  
 	<div class="main-block">
       <div class="left-part">
         <i class="fas fa-money-bill"></i>
         <h1>Dodaj wydatek</h1>
-        <p>Uzupelnij szczegoly wydatku: wartosc, data, waluta, kategoria </p>
+        <p>Uzupelnij szczegoly wydatku: wartosc, data, dodatkowy opis, waluta, kategoria </p>
       </div>
 	  
 	  <div>
@@ -199,19 +190,18 @@
 
 			  
 			  <div ng-app="myApp" ng-controller="currenciesListController">
-				<select ng-model = "selectedName" ng-options="x.currencyShort for x in currencies" ng-model="singleExpense.Currency" required >
+				<select ng-model="singleExpense.currencyShort" required>
+					<option ng-repeat="option in currencies" value="{{option.id}}">{{option.currencyName}}</option>
 				</select>
 			  </div>
 			  
 			  <div ng-app="myApp" ng-controller="categoriesListController">
-				<select ng-model = "selectedName" ng-options="x.categoryName for x in categories" ng-model="singleExpense.Category" required >
+				<select ng-model="singleExpense.categoryName" required>
+					<option ng-repeat="option in categories" value="{{option.id}}">{{option.categoryName}}</option>
 				</select>
-			  </div>
-
-
-			  
+			  </div>			  
 			</div>
-			<button type="submit" ng-disabled="saveExpenseForm.$invalid" >Zatwierdz</button>
+			<button type="submit" >Submit</button>
 		  </form>
 		</div>
     </div>

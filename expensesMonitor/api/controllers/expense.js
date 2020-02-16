@@ -34,9 +34,7 @@ function removeSingleExpense(req, res, next) {
 	r.db("ExpensesDatabase").table("SingleExpense")
 		.get(param).delete().run().then(
 	function(resOfDelete)
-	{
-		console.log(JSON.stringify(resOfDelete));
-		
+	{		
 		if(resOfDelete.deleted == 1)
 		{
 			res.json({param,status:'deleted'});
@@ -63,27 +61,33 @@ function singleExpense(req,res,next)
 	res.send(contents);
 }
 
-
 function createExpense(req,res,next)
 {
 	var expValue = req.swagger.params.expenseValue.value;
 	var expDate = req.swagger.params.date.value;
 	var expDesc = req.swagger.params.expenseDescription.value;
-	
-	
-	console.log(expValue);
-	console.log(expDate);
-	console.log(expDesc);
+	var categoVa = req.swagger.params.categoryName.value;
+	var currencyVa = req.swagger.params.currencyShort.value;
+
     r.db('ExpensesDatabase').table('SingleExpense').insert(
 	{
         expenseValue: expValue,
         expenseDate: expDate,
         expenseDescription: expDesc,
+		expenseCurrencyId: currencyVa,
+		expenseCategoryId: categoVa
     },
 	{returnChanges: true}).run().then
 	(function(result)
 	{
-		res.json(get_new(result));
+		if(result.inserted == 1)
+		{
+			res.json({status:'inserted'});
+		}
+		else 
+		{
+			res.json({status:'not inserted'});
+		}
 	});
 }
 
