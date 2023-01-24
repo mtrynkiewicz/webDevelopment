@@ -14,11 +14,11 @@
     "angular-material": "^1.1.21",
     "angular-messages": "^1.7.9",
     "express": "^4.12.3",
-    "swagger-express-mw": "^0.1.0"
+    "swagger-express-mw": "^0.7.0"
   },
   "devDependencies": {
     "should": "^7.1.0",
-    "supertest": "^1.0.0"
+    "supertest": "^6.3.3"
   },
   "scripts": {
     "start": "node app.js",
